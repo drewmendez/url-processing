@@ -61,7 +61,7 @@ function App() {
   );
 }
 
-const processKey = (key) => {
+const processKey = (key: string) => {
   // Replace numbers with letters, reverse strings, etc.
   return key
     .split("")
@@ -86,7 +86,7 @@ const DisplayJson = ({
   data: unknown;
   processed: boolean;
 }) => {
-  const renderJson = (value: unknown, depth = 0) => {
+  const renderJson = (value: any, depth = 0) => {
     if (Array.isArray(value)) {
       return (
         <ul>
