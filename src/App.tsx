@@ -53,13 +53,29 @@ function App() {
           <pre>{JSON.stringify(url, null, 2)}</pre>
         </div>
         <div className="w-[45%]">
-          <h2>Processed URL Response</h2>
-          <DisplayJson data={url} processed={true} />
+          <DisplayJson data={url} />
+
+          {/* <Entry data={url}/> */}
         </div>
       </div>
     </>
   );
 }
+
+// function Entry({data, depth = 0}) {
+//   if (Array.isArray(data)) {
+
+//     data.map(d => <Entry data={d} depth={depth + 1}/>)
+//   } else if(typeof data === "object" && data !== null) {
+
+//   } else {
+//     <span>{Object.keys(data)}: {data.}</span>
+//   }
+
+//   return <div>
+
+//   </div>
+// }
 
 const processKey = (key: string) => {
   // Replace numbers with letters, reverse strings, etc.
@@ -71,74 +87,84 @@ const processKey = (key: string) => {
     .join("");
 };
 
-const countE = (value: unknown) => {
-  // Count occurrences of the letter 'e' or 'E' in the string
-  if (typeof value === "string") {
-    return (value.match(/e/gi) || []).length;
-  }
-  return 0;
+const countE = (value) => {
+  return Object.keys(value)
+    .join("")
+    .split("")
+    .reduce((acc, curr) => {
+      if (curr === "e" || curr === "E") {
+        return acc + 1;
+      }
+      return acc;
+    }, 0);
 };
 
 const DisplayJson = ({
   data,
-  processed = false,
-}: {
+  depth = 1,
+}: // processed = false,
+{
   data: unknown;
-  processed: boolean;
+  depth: number;
+  // processed: boolean;
 }) => {
-  const renderJson = (value: any, depth = 0) => {
+  const renderJson = (value: any, depth = 1) => {
     if (Array.isArray(value)) {
       return (
-        <ul>
+        <>
           {value.map((item, index) => (
-            <li key={index}>
-              <details>
-                <summary>Item {index}:</summary>
-                {renderJson(item, depth + 1)}
-              </details>
-            </li>
+            <details key={index}>
+              <summary>Item {index}: </summary>
+              {renderJson(item, depth + 1)}
+            </details>
           ))}
-        </ul>
+        </>
       );
     } else if (typeof value === "object" && value !== null) {
-      // console.log(Object.keys(value));
-      let arr = Object.keys(value).join("").split("");
-      let count = arr.reduce((acc, curr) => {
-        if (curr === "e" || curr === "E") {
-          return (acc = acc + 1);
-        }
-        return acc;
-      }, 0);
-
       return (
-        <ul>
-          <li>
-            <span>countE: {count}</span>
-          </li>
-          {Object.entries(value).map(([key, val]) => (
-            <li key={key}>
-              <strong>{processed ? processKey(key) : key}:</strong>
-              {renderJson(val, depth + 1)}
-            </li>
-          ))}
-        </ul>
+        <>
+          <strong>countE: {countE(value)}</strong>
+          {Object.entries(value).map(([key, val]) => {
+            if (Array.isArray(val)) {
+              return (
+                <details>
+                  <summary className="font-bold">{processKey(key)}</summary>
+                  {renderJson(val, depth + 1)}
+                </details>
+              );
+            } else {
+              return (
+                <div>
+                  <strong>
+                    {processKey(key)}: {renderJson(val, depth + 1)}
+                  </strong>
+                </div>
+              );
+            }
+          })}
+        </>
       );
     } else {
       return (
-        <span>
-          {processed && countE(value) > 0 ? (
+        <>
+          {typeof value === "string" ? (
             <span className="bg-blue-400 rounded-full px-1">
               {processKey(value)}
             </span>
           ) : (
-            value.toString()
+            <span>{value}</span>
           )}
-        </span>
+        </>
       );
     }
   };
 
-  return <div>{renderJson(data)}</div>;
+  return (
+    <details>
+      <summary>Processed URL Response</summary>
+      <div className={`pl-[${depth * 20}px]`}>{renderJson(data)}</div>
+    </details>
+  );
 };
 
 export default App;
