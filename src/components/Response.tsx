@@ -23,7 +23,7 @@ export default function Response({ url, isLoading, isError }: Prop) {
 
   return (
     <div className="flex gap-10 justify-between p-5">
-      <div className="w-[50%] bg-slate-200 p-2">
+      <div className="w-[50%] bg-blue-200 p-2">
         <h2>URL Response</h2>
         <pre>{JSON.stringify(url, null, 2)}</pre>
       </div>

@@ -48,7 +48,7 @@ export default function FormInput({ fetchData }: Prop) {
       </form>
 
       {isOpen && (
-        <div className="bg-slate-200 ml-5 mr-28 absolute w-full max-w-[1707px]">
+        <div className="bg-slate-200 ml-5 mr-28 absolute w-full border-b border-x border-gray-600 max-w-[1707px]">
           {pastSearches.map((pastSearch, index) => (
             <p
               key={index}
