@@ -27,10 +27,11 @@ function App() {
   };
 
   return (
-    <>
+    <main className="px-10 min-h-screen bg-slate-50">
+      <h1 className="text-center font-bold text-xl py-6">Url Processing</h1>
       <FormInput fetchData={fetchData} />
       <Response url={url} isLoading={isLoading} isError={isError} />
-    </>
+    </main>
   );
 }
 

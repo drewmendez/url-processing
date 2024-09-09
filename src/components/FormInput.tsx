@@ -16,7 +16,7 @@ export default function FormInput({ fetchData }: Prop) {
   return (
     <>
       <form
-        className="flex justify-center mt-6 px-5 gap-3"
+        className="flex justify-center px-5 gap-3 relative"
         onSubmit={(e) => {
           e.preventDefault();
           if (!search) {
@@ -29,18 +29,26 @@ export default function FormInput({ fetchData }: Prop) {
         }}
       >
         <input
-          className="border border-black w-full pl-2"
+          className="border border-gray-500 w-full pl-2"
           type="text"
+          placeholder="Enter a query"
           value={search}
           ref={inputRef}
           onFocus={() => setIsOpen(true)}
+          onBlur={() => {
+            setTimeout(() => {
+              setIsOpen(false);
+            }, 250);
+          }}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <button className="bg-blue-400 px-4 py-2">Query</button>
+        <button className="bg-blue-400 px-4 py-2 font-bold text-white">
+          Query
+        </button>
       </form>
 
       {isOpen && (
-        <div className=" bg-slate-200 ml-5 mr-28">
+        <div className="bg-slate-200 ml-5 mr-28 absolute w-full max-w-[1707px]">
           {pastSearches.map((pastSearch, index) => (
             <p
               key={index}
